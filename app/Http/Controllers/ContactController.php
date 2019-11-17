@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
+    private $type = "application/json";
+
     public function index()
     {
     $contacts = Contact::orderBy('email', 'asc')
                         ->get();
 
-    return $contacts->toJson();
+    return response($contacts->toJson())->header('Content-Type', $this->type);;
     }
 
     public function store(Request $request)
@@ -37,7 +39,6 @@ class ContactController extends Controller
     public function show($email)
     {
         $contact = Contact::where('email', '=', $email)->firstOrFail();
-        print_r($contact);
-        return $contact->toJson();
+        return response($contact->toJson())->header('Content-Type', $this->type);
     }
 }
